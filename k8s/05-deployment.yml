@@ -1,0 +1,137 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: linkto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: backend
+  template:
+    metadata:
+      labels:
+        tier: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port:  "8080"
+    spec:
+      containers:
+        - name: app
+          image: harbor.withtanzu.com/linkto/linkto-backend:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 1Gi
+          envFrom:
+            - configMapRef:
+                name: backend
+            - secretRef:
+                name: backend
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /actuator/health/liveness
+            initialDelaySeconds: 10
+            failureThreshold: 3
+            periodSeconds: 1
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /actuator/health/readiness
+            initialDelaySeconds: 10
+            failureThreshold: 6
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: linkto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+        - name: app
+          image: harbor.withtanzu.com/linkto/linkto-frontend:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 1Gi
+          envFrom:
+            - configMapRef:
+                name: frontend
+          ports:
+            - name: http
+              containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /health
+            initialDelaySeconds: 5
+            failureThreshold: 3
+            periodSeconds: 1
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /health
+            initialDelaySeconds: 10
+            failureThreshold: 6
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: linkto
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: redis
+  template:
+    metadata:
+      labels:
+        tier: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:5
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 128Mi
+          ports:
+            - name: redis
+              containerPort: 6379
+          volumeMounts:
+            - mountPath: /bitnami/redis/data
+              name: data
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: redis

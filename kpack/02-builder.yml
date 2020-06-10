@@ -1,0 +1,50 @@
+---
+apiVersion: experimental.kpack.pivotal.io/v1alpha1
+kind: Store
+metadata:
+  name: linkto-store
+  namespace: linkto-kpack
+spec:
+  sources:
+    - image: gcr.io/paketo-buildpacks/builder:base
+---
+apiVersion: experimental.kpack.pivotal.io/v1alpha1
+kind: Stack
+metadata:
+  name: bionic-stack
+  namespace: linkto-kpack
+spec:
+  id: "io.buildpacks.stacks.bionic"
+  buildImage:
+    image: "cloudfoundry/build:0.0.1-base-cnb"
+  runImage:
+    image: "cloudfoundry/run:0.0.1-base-cnb"
+---
+apiVersion: experimental.kpack.pivotal.io/v1alpha1
+kind: CustomBuilder
+metadata:
+  name: default
+  namespace: linkto-kpack
+spec:
+  tag: harbor.withtanzu.com/linkto/linkto-builder
+  serviceAccount: kpack-service-account
+  image: gcr.io/paketo-buildpacks/builder:base
+  stack: bionic-stack
+  store: linkto-store
+  order:
+    - group:
+        - id: paketo-buildpacks/nodejs
+        - id: paketo-buildpacks/node-engine
+        - id: paketo-buildpacks/npm
+    - group:
+        - id: paketo-buildpacks/bellsoft-liberica
+        - id: paketo-buildpacks/maven
+          optional: true
+        - id: paketo-buildpacks/executable-jar
+          optional: true
+        - id: paketo-buildpacks/apache-tomcat
+          optional: true
+        - id: paketo-buildpacks/spring-boot
+          optional: true
+        - id: paketo-buildpacks/dist-zip
+          optional: true

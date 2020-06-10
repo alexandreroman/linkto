@@ -1,0 +1,36 @@
+---
+apiVersion: build.pivotal.io/v1alpha1
+kind: Image
+metadata:
+  name: linkto-frontend
+  namespace: linkto-kpack
+spec:
+  tag: harbor.withtanzu.com/linkto/linkto-frontend
+  serviceAccount: kpack-service-account
+  builder:
+    name: default
+    kind: CustomBuilder
+  cacheSize: "2Gi"
+  source:
+    subPath: frontend
+    git:
+      url: https://github.com/alexandreroman/linkto.git
+      revision: testing
+---
+apiVersion: build.pivotal.io/v1alpha1
+kind: Image
+metadata:
+  name: linkto-backend
+  namespace: linkto-kpack
+spec:
+  tag: harbor.withtanzu.com/linkto/linkto-backend
+  serviceAccount: kpack-service-account
+  builder:
+    name: default
+    kind: CustomBuilder
+  cacheSize: "2Gi"
+  source:
+    subPath: backend
+    git:
+      url: https://github.com/alexandreroman/linkto.git
+      revision: testing

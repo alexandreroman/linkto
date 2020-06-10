@@ -1,0 +1,115 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  margin: 2em auto;
+  max-width: 600px;
+  background-color: #ddd;
+}
+
+#content {
+  background-color: white;
+  padding: 2em;
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.22);
+  border-radius: 6px 6px;
+}
+
+header {
+  margin: 1em 0 2em 0;
+}
+
+.content {
+  margin: 4em;
+}
+
+h1 {
+  font-family: 'Bungee', cursive;
+  font-size: 400%;
+  color: darkcyan;
+}
+
+header p {
+  color: darkslategray;
+}
+
+footer {
+  font-size: 12px;
+  margin: 3em 0 0 0;
+}
+
+footer, footer a {
+  color: darkgray;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+form {
+  text-align: center;
+}
+
+input.field {
+  box-sizing: border-box;
+	outline: none;
+	display: block;
+	width: 100%;
+	padding: 7px;
+	border: none;
+	border-bottom: 1px solid #ddd;
+	background: transparent;
+	margin-bottom: 10px;
+	font-size: 18px;
+  height: 45px;
+}
+
+input.button {
+	position: relative;
+	display: block;
+	padding: 10px 40px;
+	color: #FFF;
+	margin: 0 auto;
+	background: #1abc9c;
+	font-size: 18px;
+	text-align: center;
+	font-style: normal;
+	width: 100%;
+	border: 1px solid #16a085;
+  border-width: 1px 1px 3px;
+  margin: 0.5em 0;
+}
+
+input.button:hover, #tryagain a:hover {
+	background: #109177;
+}
+
+#tryagain a {
+	display: block;
+	padding: 10px 40px;
+	color: #FFF;
+	margin: 0 auto;
+	background: #1abc9c;
+	font-size: 18px;
+	text-align: center;
+	font-style: normal;
+	border: 1px solid #16a085;
+  border-width: 1px 1px 3px;
+  text-decoration: none;
+}
+
+#result {
+  margin: 2.5em 0;
+}
+
+#result a {
+  font-size: 160%;
+  text-decoration: none;
+  color: #888;
+}
+
+#result a:hover {
+  text-decoration: underline;
+}
+
+#tryagain {
+  display: none;
+}
