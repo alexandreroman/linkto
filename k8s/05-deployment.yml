@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: harbor.withtanzu.com/linkto/linkto-backend:latest
+          image: alexandreroman/linkto-backend:latest
           imagePullPolicy: Always
           resources:
             limits:
@@ -64,7 +64,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: harbor.withtanzu.com/linkto/linkto-frontend:latest
+          image: alexandreroman/linkto-frontend:latest
           imagePullPolicy: Always
           resources:
             limits:
